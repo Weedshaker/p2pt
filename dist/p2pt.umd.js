@@ -8165,8 +8165,8 @@ function filterTrickle (sdp) {
 }
 
 function makeError (err, code) {
-  if (!(err instanceof Error)) err = new Error(err)
-  err.code = code
+  if (!(err instanceof Error)) err = new Error(`${err} - ${code}`)
+  //err.code = code
   return err
 }
 
