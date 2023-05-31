@@ -8352,7 +8352,7 @@ class Peer extends stream.Duplex {
         this._pendingCandidates.push(data.candidate)
       }
     }
-    if (data.sdp) {
+    if (data.sdp && this._pc) {
       this._pc.setRemoteDescription(new (this._wrtc.RTCSessionDescription)(data))
         .then(() => {
           if (this.destroyed) return
@@ -8390,7 +8390,7 @@ class Peer extends stream.Duplex {
    * @param {ArrayBufferView|ArrayBuffer|Buffer|string|Blob} chunk
    */
   send (chunk) {
-    this._channel.send(chunk)
+    if (this._channel) this._channel.send(chunk)
   }
 
   /**
@@ -9984,7 +9984,7 @@ class P2PT extends EventEmitter {
          * We will store all channels as backups in case any one of them fails
          * A peer is removed if all data channels become unavailable
          */
-        this.peers[peer.id][peer.channelName] = peer
+        if (this.peers[peer.id]) this.peers[peer.id][peer.channelName] = peer
 
         if (newpeer) {
           this.emit('peerconnect', peer)
